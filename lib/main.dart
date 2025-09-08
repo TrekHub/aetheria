@@ -1,3 +1,4 @@
+import 'package:aetheria/screens/dashboard_screen.dart';
 import 'package:aetheria/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,12 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Aetheria',
       theme: AppTheme.appTheme,
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppTheme.skyBlue,
-          title: Text("Aetheria", style: TextStyle(color: Colors.white)),
-        ),
-      ),
+      home: DashboardScreen(),
     );
   }
 }
