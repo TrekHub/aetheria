@@ -11,7 +11,19 @@
 - **🔥 Firebase Integration**: Powered by Firebase Core and Vertex AI
 - **🎯 State Management**: Uses Provider pattern for efficient state management
 
-## 🚀 Getting Started
+## � Screenshots
+
+<div align="center">
+  <img src="screenshots/one.png" width="200" alt="Screenshot 1" />
+  <img src="screenshots/two.png" width="200" alt="Screenshot 2" />
+  <img src="screenshots/three.png" width="200" alt="Screenshot 3" />
+  <img src="screenshots/four.png" width="200" alt="Screenshot 4" />
+  <img src="screenshots/five.png" width="200" alt="Screenshot 5" />
+</div>
+
+_Experience the spiritual journey with AI-powered sermons and daily inspiration_
+
+## �🚀 Getting Started
 
 ### Prerequisites
 
