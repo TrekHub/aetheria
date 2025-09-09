@@ -16,7 +16,7 @@ Thank you for your interest in contributing to Aetheria! This document provides 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/your-username/aetheria.git
+   git clone https://github.com/trekhub/aetheria.git
    cd aetheria
    ```
 3. **Set up the development environment** following the main README

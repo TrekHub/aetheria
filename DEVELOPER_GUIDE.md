@@ -7,7 +7,7 @@ Welcome to Aetheria! This guide will get you up and running quickly.
 1. **Clone and Install**:
 
    ```bash
-   git clone https://github.com/your-username/aetheria.git
+   git clone https://github.com/trekhub/aetheria.git
    cd aetheria
    flutter pub get
    ```
@@ -178,8 +178,8 @@ ChangeNotifierProvider(create: (context) => SermonProvider())
 
 ## 🆘 Getting Help
 
-- **Issues**: [GitHub Issues](https://github.com/your-username/aetheria/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/aetheria/discussions)
+- **Issues**: [GitHub Issues](https://github.com/trekhub/aetheria/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/trekhub/aetheria/discussions)
 - **Documentation**: Check all `.md` files in the repo
 
 ## 💡 Development Tips

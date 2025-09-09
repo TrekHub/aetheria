@@ -46,7 +46,7 @@ firebase login
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/aetheria.git
+git clone https://github.com/trekhub/aetheria.git
 cd aetheria
 ```
 
