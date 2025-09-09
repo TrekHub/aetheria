@@ -2,7 +2,6 @@
 
 import 'package:aetheria/providers/sermon_provider.dart';
 import 'package:aetheria/screens/sermon_display_screen.dart';
-import 'package:aetheria/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,238 +35,251 @@ class _SermonFormScreenState extends State<SermonFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundWhite,
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        title: const Text('Share Your Heart'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFF2D3748),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Share Your Heart',
+          style: TextStyle(
+            color: Color(0xFF2D3748),
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Consumer<SermonProvider>(
         builder: (context, sermonProvider, child) {
           return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(AppTheme.spacingM),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Header Section
-                    Container(
-                      padding: const EdgeInsets.all(AppTheme.spacingL),
-                      decoration: AppTheme.glassMorphism,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(AppTheme.spacingM),
-                            decoration: BoxDecoration(
-                              color: AppTheme.primaryBlue.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(
-                                AppTheme.radiusXL,
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.favorite_outline,
-                              color: AppTheme.primaryBlue,
-                              size: 32,
-                            ),
-                          ),
-                          const SizedBox(height: AppTheme.spacingM),
-                          Text(
-                            'What\'s on your heart?',
-                            style: Theme.of(context).textTheme.headlineMedium
-                                ?.copyWith(fontWeight: FontWeight.w700),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: AppTheme.spacingS),
-                          Text(
-                            'Share your feelings, struggles, joys, or thoughts. Our AI will create a personalized sermon to comfort, guide, and inspire you.',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
+
+                  // Simple Header
+                  const Text(
+                    'What\'s on your mind?',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF2D3748),
                     ),
-
-                    const SizedBox(height: AppTheme.spacingL),
-
-                    // Input Section
-                    Container(
-                      padding: const EdgeInsets.all(AppTheme.spacingL),
-                      decoration: AppTheme.glassMorphism,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Your feeling or situation',
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: AppTheme.spacingS),
-                          TextFormField(
-                            controller: _feelingController,
-                            maxLines: 4,
-                            decoration: const InputDecoration(
-                              hintText:
-                                  'I\'m feeling anxious about the future...\nI\'m grateful for...\nI\'m struggling with...\nI need guidance on...',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Please share what\'s on your heart';
-                              }
-                              if (value.trim().length < 5) {
-                                return 'Please provide more details (at least 5 characters)';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: AppTheme.spacingM),
-
-                          // Quick suggestions
-                          if (widget.presetFeeling == null) ...[
-                            Text(
-                              'Quick suggestions:',
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: AppTheme.spacingS),
-                            Wrap(
-                              spacing: AppTheme.spacingS,
-                              runSpacing: AppTheme.spacingXS,
-                              children: [
-                                _buildSuggestionChip('Feeling anxious'),
-                                _buildSuggestionChip('Need hope'),
-                                _buildSuggestionChip('Feeling grateful'),
-                                _buildSuggestionChip('Struggling with doubt'),
-                                _buildSuggestionChip('Need peace'),
-                                _buildSuggestionChip('Feeling lonely'),
-                              ],
-                            ),
-                          ],
-                        ],
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Share your thoughts, feelings, or what you\'re going through.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                      height: 1.5,
                     ),
+                  ),
 
-                    const SizedBox(height: AppTheme.spacingL),
+                  const SizedBox(height: 32),
 
-                    // Generate Button
-                    Container(
-                      height: 56,
-                      decoration: sermonProvider.state == SermonState.loading
-                          ? null
-                          : AppTheme.primaryButtonDecoration,
-                      child: ElevatedButton.icon(
-                        onPressed: sermonProvider.state == SermonState.loading
-                            ? null
-                            : () => _generateSermon(context, sermonProvider),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              sermonProvider.state == SermonState.loading
-                              ? AppTheme.textLight
-                              : Colors.transparent,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppTheme.radiusMedium,
-                            ),
-                          ),
+                  // Input Field
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.02),
+                          offset: const Offset(0, 1),
+                          blurRadius: 3,
                         ),
-                        icon: sermonProvider.state == SermonState.loading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
+                      ],
+                    ),
+                    child: TextFormField(
+                      controller: _feelingController,
+                      maxLines: 6,
+                      decoration: InputDecoration(
+                        hintText: 'I\'ve been feeling anxious about work lately...\n\nI\'m grateful for my family but...\n\nI need guidance on...',
+                        hintStyle: TextStyle(
+                          color: Colors.grey[400],
+                          height: 1.6,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.all(20),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        height: 1.6,
+                        color: Color(0xFF2D3748),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please share what\'s on your heart';
+                        }
+                        if (value.trim().length < 5) {
+                          return 'Please provide more details';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Quick suggestions (only if no preset)
+                  if (widget.presetFeeling == null) ...[
+                    Text(
+                      'Or tap one of these:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        _buildSuggestionChip('Feeling anxious'),
+                        _buildSuggestionChip('Need peace'),
+                        _buildSuggestionChip('Feeling grateful'),
+                        _buildSuggestionChip('Feeling lost'),
+                        _buildSuggestionChip('Need hope'),
+                        _buildSuggestionChip('Struggling with doubt'),
+                      ],
+                    ),
+                  ],
+
+                  const SizedBox(height: 40),
+
+                  // Generate Button
+                  SizedBox(
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: sermonProvider.state == SermonState.loading
+                          ? null
+                          : () => _generateSermon(context, sermonProvider),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: sermonProvider.state == SermonState.loading
+                            ? Colors.grey[400]
+                            : const Color(0xFF2D3748),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: sermonProvider.state == SermonState.loading
+                          ? const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white,
+                                    ),
                                   ),
                                 ),
-                              )
-                            : const Icon(
-                                Icons.auto_fix_high,
-                                color: Colors.white,
-                              ),
-                        label: Text(
-                          sermonProvider.state == SermonState.loading
-                              ? 'Creating your sermon...'
-                              : 'Generate Sermon',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // Error Message
-                    if (sermonProvider.state == SermonState.error) ...[
-                      const SizedBox(height: AppTheme.spacingM),
-                      Container(
-                        padding: const EdgeInsets.all(AppTheme.spacingM),
-                        decoration: BoxDecoration(
-                          color: AppTheme.errorRed.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
-                          ),
-                          border: Border.all(
-                            color: AppTheme.errorRed.withOpacity(0.3),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.error_outline,
-                              color: AppTheme.errorRed,
-                            ),
-                            const SizedBox(width: AppTheme.spacingS),
-                            Expanded(
-                              child: Text(
-                                sermonProvider.errorMessage ??
-                                    'Failed to generate sermon. Please try again.',
-                                style: const TextStyle(
-                                  color: AppTheme.errorRed,
+                                SizedBox(width: 12),
+                                Text(
+                                  'Creating your sermon...',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
+                              ],
+                            )
+                          : const Text(
+                              'Create Sermon',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
+                  ),
 
-                    const SizedBox(height: AppTheme.spacingXL),
-
-                    // Privacy Notice
+                  // Error Message
+                  if (sermonProvider.state == SermonState.error) ...[
+                    const SizedBox(height: 16),
                     Container(
-                      padding: const EdgeInsets.all(AppTheme.spacingM),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.lightBlue.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(
-                          AppTheme.radiusSmall,
-                        ),
+                        color: Colors.red[50],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.red[200]!),
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.privacy_tip_outlined,
-                            color: AppTheme.primaryBlue,
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red[600],
                             size: 20,
                           ),
-                          const SizedBox(width: AppTheme.spacingS),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'Your thoughts are private and secure. We use them only to create your personalized sermon.',
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(color: AppTheme.textMedium),
+                              sermonProvider.errorMessage ??
+                                  'Something went wrong. Please try again.',
+                              style: TextStyle(
+                                color: Colors.red[700],
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ],
-                ),
+
+                  const SizedBox(height: 40),
+
+                  // Privacy Notice
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.lock_outline,
+                          color: Colors.blue[600],
+                          size: 18,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Your thoughts are private and only used to create your personalized sermon.',
+                            style: TextStyle(
+                              color: Colors.blue[700],
+                              fontSize: 13,
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           );
@@ -277,27 +289,22 @@ class _SermonFormScreenState extends State<SermonFormScreen> {
   }
 
   Widget _buildSuggestionChip(String text) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         _feelingController.text = text;
       },
-      borderRadius: BorderRadius.circular(AppTheme.radiusXL),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spacingM,
-          vertical: AppTheme.spacingXS,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: AppTheme.primaryBlue.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(AppTheme.radiusXL),
-          border: Border.all(color: AppTheme.primaryBlue.withOpacity(0.2)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey[200]!),
         ),
         child: Text(
           text,
           style: const TextStyle(
-            color: AppTheme.primaryBlue,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            color: Color(0xFF2D3748),
           ),
         ),
       ),

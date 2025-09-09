@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SermonService {
   final model = FirebaseAI.vertexAI().generativeModel(
@@ -45,20 +43,6 @@ class SermonService {
 
     try {
       final data = jsonDecode(raw) as Map<String, dynamic>;
-
-      // Optional: Save nicely formatted JSON for debugging
-      if (kDebugMode) {
-        try {
-          final jsonString = const JsonEncoder.withIndent('  ').convert(data);
-          final directory = await getApplicationDocumentsDirectory();
-          final file = File('${directory.path}/response.json');
-          await file.writeAsString(jsonString);
-          print('Response saved to: ${file.path}');
-        } catch (e) {
-          print('Could not save response file: $e');
-        }
-      }
-
       return data;
     } catch (error) {
       if (kDebugMode) {

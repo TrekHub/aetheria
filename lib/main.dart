@@ -1,6 +1,7 @@
 import 'package:aetheria/firebase_options.dart';
 import 'package:aetheria/providers/sermon_provider.dart';
 import 'package:aetheria/screens/dashboard_screen.dart';
+import 'package:aetheria/screens/splash_screen.dart';
 import 'package:aetheria/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         title: 'Aetheria',
         theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
-        home: const DashboardScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

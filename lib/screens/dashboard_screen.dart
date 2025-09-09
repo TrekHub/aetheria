@@ -1,7 +1,6 @@
 import 'package:aetheria/providers/sermon_provider.dart';
 import 'package:aetheria/screens/sermon_display_screen.dart';
 import 'package:aetheria/screens/sermon_form_screen.dart';
-import 'package:aetheria/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,222 +10,175 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundWhite,
-      body: CustomScrollView(
-        slivers: [
-          // Modern App Bar with gradient
-          SliverAppBar.large(
-            expandedHeight: 200.0,
-            floating: false,
-            pinned: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: const BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppTheme.spacingL),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Welcome to',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(color: Colors.white.withOpacity(0.8)),
-                        ),
-                        const SizedBox(height: AppTheme.spacingXS),
-                        Text(
-                          'Aetheria',
-                          style: Theme.of(context).textTheme.headlineLarge
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                              ),
-                        ),
-                        const SizedBox(height: AppTheme.spacingXS),
-                        Text(
-                          'Sermons for the soul',
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(color: Colors.white.withOpacity(0.9)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              
+              // Simple Header
+              _buildHeader(context),
+              
+              const SizedBox(height: 40),
+              
+              // Today's Verse - Clean and Simple
+              _buildTodaysVerse(context),
+              
+              const SizedBox(height: 36),
+              
+              // How are you feeling? Section
+              _buildFeelingSection(context),
+              
+              const SizedBox(height: 36),
+              
+              // Recent Sermons
+              Consumer<SermonProvider>(
+                builder: (context, sermonProvider, child) {
+                  return _buildRecentSermons(context, sermonProvider);
+                },
               ),
-            ),
-          ),
-
-          // Content
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(AppTheme.spacingM),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Daily Inspiration Card
-                  _buildDailyInspirationCard(context),
-
-                  const SizedBox(height: AppTheme.spacingL),
-
-                  // Quick Actions
-                  _buildQuickActions(context),
-
-                  const SizedBox(height: AppTheme.spacingL),
-
-                  // Recent Sermons
-                  Consumer<SermonProvider>(
-                    builder: (context, sermonProvider, child) {
-                      return _buildRecentSermons(context, sermonProvider);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: Container(
-        decoration: AppTheme.primaryButtonDecoration,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SermonFormScreen()),
-            );
-          },
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          icon: const Icon(Icons.auto_fix_high, color: Colors.white),
-          label: const Text(
-            'Create Sermon',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+              
+              const SizedBox(height: 100), // Space for FAB
+            ],
           ),
         ),
       ),
+      floatingActionButton: _buildSimpleFAB(context),
     );
   }
 
-  Widget _buildDailyInspirationCard(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppTheme.spacingL),
-      decoration: AppTheme.glassMorphism,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(AppTheme.spacingS),
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryBlue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-                ),
-                child: const Icon(
-                  Icons.wb_sunny_outlined,
-                  color: AppTheme.primaryBlue,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: AppTheme.spacingS),
-              Text(
-                'Daily Inspiration',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppTheme.spacingM),
-          Text(
-            '"But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint."',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontStyle: FontStyle.italic,
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: AppTheme.spacingS),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              '— Isaiah 40:31',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.primaryBlue,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickActions(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Quick Actions',
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+          'Good morning 🌅',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w400,
+          ),
         ),
-        const SizedBox(height: AppTheme.spacingM),
-        Row(
-          children: [
-            Expanded(
-              child: _buildActionCard(
-                context,
-                icon: Icons.psychology_outlined,
-                title: 'Find Peace',
-                subtitle: 'When feeling anxious',
-                color: AppTheme.successGreen,
-                onTap: () =>
-                    _navigateToForm(context, 'feeling anxious and need peace'),
-              ),
-            ),
-            const SizedBox(width: AppTheme.spacingM),
-            Expanded(
-              child: _buildActionCard(
-                context,
-                icon: Icons.favorite_outline,
-                title: 'Show Gratitude',
-                subtitle: 'Count your blessings',
-                color: AppTheme.warningOrange,
-                onTap: () => _navigateToForm(context, 'grateful and thankful'),
-              ),
-            ),
-          ],
+        const SizedBox(height: 8),
+        const Text(
+          'Aetheria',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w300,
+            color: Color(0xFF2D3748),
+            letterSpacing: -0.5,
+          ),
         ),
-        const SizedBox(height: AppTheme.spacingM),
-        Row(
-          children: [
-            Expanded(
-              child: _buildActionCard(
-                context,
-                icon: Icons.healing_outlined,
-                title: 'Seek Healing',
-                subtitle: 'When feeling hurt',
-                color: AppTheme.accentPurple,
-                onTap: () => _navigateToForm(context, 'hurt and need healing'),
-              ),
+      ],
+    );
+  }
+
+  Widget _buildTodaysVerse(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Today\'s Verse',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+              letterSpacing: 0.3,
             ),
-            const SizedBox(width: AppTheme.spacingM),
-            Expanded(
-              child: _buildActionCard(
-                context,
-                icon: Icons.lightbulb_outline,
-                title: 'Find Hope',
-                subtitle: 'In difficult times',
-                color: AppTheme.primaryBlue,
-                onTap: () =>
-                    _navigateToForm(context, 'hopeless and need encouragement'),
-              ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            '"Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth."',
+            style: TextStyle(
+              fontSize: 18,
+              height: 1.6,
+              color: Color(0xFF2D3748),
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Psalm 46:10',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[500],
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeelingSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'How are you feeling?',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF2D3748),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            _buildFeelingChip(
+              context,
+              'Anxious',
+              '😰',
+              'feeling anxious and need peace',
+            ),
+            _buildFeelingChip(
+              context,
+              'Grateful',
+              '🙏',
+              'grateful and thankful',
+            ),
+            _buildFeelingChip(
+              context,
+              'Hurt',
+              '💔',
+              'hurt and need healing',
+            ),
+            _buildFeelingChip(
+              context,
+              'Lost',
+              '🌫️',
+              'lost and need direction',
+            ),
+            _buildFeelingChip(
+              context,
+              'Hopeful',
+              '🌟',
+              'hopeful and expectant',
+            ),
+            _buildFeelingChip(
+              context,
+              'Tired',
+              '😴',
+              'tired and need rest',
             ),
           ],
         ),
@@ -234,44 +186,34 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionCard(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+  Widget _buildFeelingChip(
+    BuildContext context,
+    String label,
+    String emoji,
+    String preset,
+  ) {
+    return GestureDetector(
+      onTap: () => _navigateToForm(context, preset),
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.spacingM),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          border: Border.all(color: color.withOpacity(0.2)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey[200]!, width: 1),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: const EdgeInsets.all(AppTheme.spacingS),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-              ),
-              child: Icon(icon, color: color, size: 20),
-            ),
-            const SizedBox(height: AppTheme.spacingS),
+            Text(emoji, style: const TextStyle(fontSize: 16)),
+            const SizedBox(width: 8),
             Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: color,
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Color(0xFF2D3748),
+                fontWeight: FontWeight.w400,
               ),
             ),
-            Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),
@@ -292,43 +234,48 @@ class DashboardScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Recent Sermons',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+            const Text(
+              'Your Sermons',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: Color(0xFF2D3748),
+              ),
             ),
-            if (sermonProvider.savedSermons.length > 3)
-              TextButton(
-                onPressed: () {
+            if (sermonProvider.savedSermons.length > 2)
+              GestureDetector(
+                onTap: () {
                   // TODO: Navigate to all sermons
                 },
-                child: const Text('See All'),
+                child: Text(
+                  'See all',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
           ],
         ),
-        const SizedBox(height: AppTheme.spacingM),
+        const SizedBox(height: 16),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: sermonProvider.savedSermons.length.clamp(0, 3),
+          itemCount: sermonProvider.savedSermons.length.clamp(0, 2),
           itemBuilder: (context, index) {
             final sermon = sermonProvider.savedSermons[index];
-            return _buildSermonCard(context, sermon, index);
+            return _buildSermonCard(context, sermon);
           },
         ),
       ],
     );
   }
 
-  Widget _buildSermonCard(
-    BuildContext context,
-    Map<String, dynamic> sermon,
-    int index,
-  ) {
+  Widget _buildSermonCard(BuildContext context, Map<String, dynamic> sermon) {
     return Container(
-      margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
-      child: InkWell(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: GestureDetector(
         onTap: () {
           Navigator.push(
             context,
@@ -337,54 +284,66 @@ class DashboardScreen extends StatelessWidget {
             ),
           );
         },
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         child: Container(
-          padding: const EdgeInsets.all(AppTheme.spacingM),
-          decoration: AppTheme.glassMorphism,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.02),
+                offset: const Offset(0, 1),
+                blurRadius: 3,
+              ),
+            ],
+          ),
           child: Row(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                  color: const Color(0xFFF7FAFC),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
-                  Icons.auto_stories,
-                  color: Colors.white,
-                  size: 24,
+                  Icons.article_outlined,
+                  color: Color(0xFF718096),
+                  size: 20,
                 ),
               ),
-              const SizedBox(width: AppTheme.spacingM),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       sermon['title'] ?? 'Untitled Sermon',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF2D3748),
                       ),
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: AppTheme.spacingXS),
-                    if (sermon['bible_verse'] != null)
+                    if (sermon['bible_verse'] != null) ...[
+                      const SizedBox(height: 4),
                       Text(
                         sermon['bible_verse']['reference'] ?? '',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.primaryBlue,
-                          fontWeight: FontWeight.w500,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[600],
                         ),
                       ),
+                    ],
                   ],
                 ),
               ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: AppTheme.textLight,
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey[400],
+                size: 20,
               ),
             ],
           ),
@@ -396,46 +355,60 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildEmptyState(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppTheme.spacingXL),
+      padding: const EdgeInsets.all(32),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(AppTheme.spacingL),
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
-              color: AppTheme.lightBlue.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+              color: const Color(0xFFF7FAFC),
+              borderRadius: BorderRadius.circular(32),
             ),
             child: const Icon(
               Icons.auto_stories_outlined,
-              size: 48,
-              color: AppTheme.primaryBlue,
+              color: Color(0xFF718096),
+              size: 28,
             ),
           ),
-          const SizedBox(height: AppTheme.spacingL),
-          Text(
-            'No Sermons Yet',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+          const SizedBox(height: 20),
+          const Text(
+            'No sermons yet',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF2D3748),
+            ),
           ),
-          const SizedBox(height: AppTheme.spacingS),
+          const SizedBox(height: 8),
           Text(
-            'Start by sharing how you\'re feeling, and let AI create a personalized sermon just for you.',
-            style: Theme.of(context).textTheme.bodyMedium,
+            'Tap the + button to create your first personalized sermon',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+              height: 1.4,
+            ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: AppTheme.spacingL),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SermonFormScreen()),
-              );
-            },
-            icon: const Icon(Icons.add),
-            label: const Text('Create Your First Sermon'),
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSimpleFAB(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SermonFormScreen()),
+        );
+      },
+      backgroundColor: const Color(0xFF2D3748),
+      elevation: 2,
+      child: const Icon(
+        Icons.add,
+        color: Colors.white,
+        size: 28,
       ),
     );
   }

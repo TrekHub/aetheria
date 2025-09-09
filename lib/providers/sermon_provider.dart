@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/foundation.dart';
 import 'package:aetheria/service/sermon_service.dart';
 

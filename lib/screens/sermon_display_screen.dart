@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:aetheria/utils/app_theme.dart';
 
 class SermonDisplayScreen extends StatelessWidget {
   final Map<String, dynamic> sermon;
@@ -12,30 +11,46 @@ class SermonDisplayScreen extends StatelessWidget {
     final bibleVerse = sermon['bible_verse'] as Map<String, dynamic>?;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        backgroundColor: AppTheme.primaryBlue,
-        title: Text('Your Sermon'),
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color(0xFF2D3748),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Your Sermon',
+          style: TextStyle(
+            color: Color(0xFF2D3748),
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Poster SVG
-            if (sermon['poster'] != null)
+            // Poster (if available) - simplified
+            if (sermon['poster'] != null) ...[
               Container(
                 width: double.infinity,
-                height: 200,
-                margin: const EdgeInsets.only(bottom: 20),
+                height: 180,
+                margin: const EdgeInsets.only(bottom: 24),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
+                      color: Colors.black.withOpacity(0.02),
+                      offset: const Offset(0, 1),
+                      blurRadius: 3,
                     ),
                   ],
                 ),
@@ -45,206 +60,172 @@ class SermonDisplayScreen extends StatelessWidget {
                     sermon['poster'],
                     fit: BoxFit.cover,
                     placeholderBuilder: (context) => Container(
-                      color: AppTheme.primaryBlue.withOpacity(0.3),
-                      child: const Center(
-                        child: Icon(Icons.image, size: 50, color: Colors.grey),
+                      color: Colors.grey[100],
+                      child: Icon(
+                        Icons.image_outlined,
+                        size: 40,
+                        color: Colors.grey[400],
                       ),
                     ),
                   ),
                 ),
               ),
+            ],
 
             // Title
             Text(
-              sermon['title'] ?? 'Untitled Sermon',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+              sermon['title'] ?? 'Your Sermon',
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFF2D3748),
+                height: 1.2,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
+
+            // Bible Verse - featured prominently
+            if (bibleVerse != null) ...[
+              _buildBibleVerse(bibleVerse),
+              const SizedBox(height: 32),
+            ],
 
             // Introduction
             if (sermon['intro'] != null) ...[
-              _buildSectionCard(
-                title: 'Introduction',
-                content: sermon['intro'],
-                icon: Icons.lightbulb_outline,
-              ),
-              const SizedBox(height: 16),
+              _buildSection('Introduction', sermon['intro']),
+              const SizedBox(height: 24),
             ],
 
-            // Bible Verse
-            if (bibleVerse != null) ...[
-              _buildBibleVerseCard(bibleVerse),
-              const SizedBox(height: 16),
-            ],
-
-            // Preaching
+            // Main Message
             if (sermon['preaching'] != null) ...[
-              _buildSectionCard(
-                title: 'Message',
-                content: sermon['preaching'],
-                icon: Icons.auto_stories,
-              ),
-              const SizedBox(height: 16),
+              _buildSection('Message', sermon['preaching']),
+              const SizedBox(height: 24),
             ],
 
             // Call to Action
             if (sermon['call_to_action'] != null) ...[
-              _buildCallToActionCard(sermon['call_to_action']),
+              _buildCallToAction(sermon['call_to_action']),
             ],
+
+            const SizedBox(height: 40),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSectionCard({
-    required String title,
-    required String content,
-    required IconData icon,
-  }) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: AppTheme.primaryBlue, size: 24),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              content,
-              style: const TextStyle(
-                fontSize: 16,
-                height: 1.5,
-                color: Colors.black87,
-              ),
-            ),
-          ],
-        ),
+  Widget _buildBibleVerse(Map<String, dynamic> bibleVerse) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget _buildBibleVerseCard(Map<String, dynamic> bibleVerse) {
-    return Card(
-      elevation: 3,
-      color: AppTheme.primaryBlue.withOpacity(0.1),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.menu_book, color: AppTheme.primaryBlue, size: 24),
-                const SizedBox(width: 8),
-                const Text(
-                  'Scripture',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Scripture',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+              letterSpacing: 0.3,
             ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppTheme.primaryBlue.withOpacity(0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '"${bibleVerse['verse'] ?? ''}"',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.5,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      '— ${bibleVerse['reference'] ?? ''}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.primaryBlue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '"${bibleVerse['verse'] ?? ''}"',
+            style: const TextStyle(
+              fontSize: 20,
+              height: 1.6,
+              color: Color(0xFF2D3748),
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.italic,
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCallToActionCard(String callToAction) {
-    return Card(
-      elevation: 3,
-      color: AppTheme.primaryBlue.withOpacity(0.2),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.favorite, color: Colors.red.shade400, size: 24),
-                const SizedBox(width: 8),
-                const Text(
-                  'Call to Action',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              callToAction,
-              style: const TextStyle(
-                fontSize: 16,
-                height: 1.5,
-                color: Colors.black87,
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              bibleVerse['reference'] ?? '',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
                 fontWeight: FontWeight.w500,
               ),
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSection(String title, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF2D3748),
+          ),
         ),
+        const SizedBox(height: 12),
+        Text(
+          content,
+          style: TextStyle(
+            fontSize: 16,
+            height: 1.7,
+            color: Colors.grey[700],
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCallToAction(String callToAction) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2D3748),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Reflection',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white70,
+              letterSpacing: 0.3,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            callToAction,
+            style: const TextStyle(
+              fontSize: 18,
+              height: 1.6,
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }
