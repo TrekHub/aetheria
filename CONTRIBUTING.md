@@ -90,20 +90,25 @@ Use this template for bug reports:
 
 ```markdown
 ## Bug Description
+
 Brief description of the bug
 
 ## Steps to Reproduce
+
 1. Go to...
 2. Click on...
 3. See error
 
 ## Expected Behavior
+
 What should happen
 
 ## Actual Behavior
+
 What actually happens
 
 ## Environment
+
 - Platform: [Android/iOS/Web/macOS/Windows]
 - Device: [Device model if mobile]
 - OS Version: [Version number]
@@ -111,9 +116,11 @@ What actually happens
 - App Version: [Version from pubspec.yaml]
 
 ## Screenshots
+
 [If applicable]
 
 ## Additional Context
+
 [Any other relevant information]
 ```
 
@@ -137,6 +144,7 @@ For feature requests, please include:
 6. **Create a descriptive PR title** and description
 
 ### PR Title Format
+
 - `feat: add new sermon filtering feature`
 - `fix: resolve Firebase initialization issue`
 - `docs: update setup instructions`
@@ -147,15 +155,18 @@ For feature requests, please include:
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix (non-breaking change that fixes an issue)
 - [ ] New feature (non-breaking change that adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Tested on Android
 - [ ] Tested on iOS
 - [ ] Tested on Web
@@ -163,9 +174,11 @@ Brief description of changes
 - [ ] Firebase integration tested
 
 ## Screenshots
+
 [If applicable]
 
 ## Checklist
+
 - [ ] My code follows the style guidelines
 - [ ] I have performed a self-review
 - [ ] I have commented complex code
@@ -201,6 +214,7 @@ lib/
 ### Branch Naming
 
 Use descriptive branch names:
+
 - `feature/sermon-categories`
 - `fix/firebase-auth-crash`
 - `docs/setup-guide-improvements`
@@ -209,6 +223,7 @@ Use descriptive branch names:
 ### Commit Messages
 
 Follow conventional commit format:
+
 - `feat: add sermon search functionality`
 - `fix: resolve daily verse loading issue`
 - `docs: update Firebase setup guide`
@@ -254,6 +269,7 @@ Follow conventional commit format:
 ### Adding New Dependencies
 
 Before adding new dependencies:
+
 1. **Check if it's really needed** - can you implement it yourself?
 2. **Verify the package quality** - check pub.dev ratings and maintenance
 3. **Check compatibility** with existing dependencies
@@ -272,6 +288,7 @@ Before adding new dependencies:
 ### Unit Tests
 
 Write unit tests for:
+
 - Service layer logic (sermon generation, verse fetching)
 - Provider state management
 - Utility functions
@@ -280,6 +297,7 @@ Write unit tests for:
 ### Widget Tests
 
 Test UI components for:
+
 - Proper rendering
 - User interaction handling
 - State changes
@@ -288,6 +306,7 @@ Test UI components for:
 ### Integration Tests
 
 Test complete user flows:
+
 - Sermon generation process
 - Daily verse display
 - Navigation between screens
@@ -305,6 +324,7 @@ Test complete user flows:
 ### README Updates
 
 When adding features:
+
 - Update the features list
 - Add new setup steps if required
 - Update screenshots if UI changes
@@ -313,6 +333,7 @@ When adding features:
 ## 🎖️ Recognition
 
 Contributors will be recognized in:
+
 - GitHub contributors list
 - CHANGELOG.md for significant contributions
 - Special mentions for major features or fixes
@@ -320,6 +341,7 @@ Contributors will be recognized in:
 ## 📞 Getting Help
 
 If you need help:
+
 1. **Check existing issues** and documentation
 2. **Ask questions** in GitHub issues
 3. **Join discussions** in pull request comments
@@ -328,6 +350,7 @@ If you need help:
 ## 📄 Code of Conduct
 
 Please be respectful and professional in all interactions:
+
 - Be welcoming to newcomers
 - Respect different viewpoints and experiences
 - Focus on constructive feedback

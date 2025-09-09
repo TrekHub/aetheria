@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project setup with Flutter framework
 - Firebase integration with Vertex AI (Gemini)
 - AI-powered sermon generation based on topics/feelings
@@ -19,12 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Splash screen with animated branding
 
 ### Features
+
 - **Sermon Generator**: Users can input topics or feelings to generate personalized sermons
 - **Daily Verses**: Inspirational Bible verses with contextual themes
 - **Visual Content**: AI-generated SVG posters for sermons
 - **Cross-Platform**: Full support across mobile, desktop, and web platforms
 
 ### Technical
+
 - Firebase Core integration
 - Vertex AI (Gemini 2.5 Flash) integration
 - Provider-based state management
@@ -33,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive error handling
 
 ### Documentation
+
 - Detailed setup instructions
 - Firebase configuration guide
 - Contributing guidelines
@@ -42,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-XX-XX
 
 ### Initial Release
+
 - Core application functionality
 - Firebase and AI integration
 - Multi-platform support

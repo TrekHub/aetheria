@@ -74,11 +74,13 @@ This is the most critical part of the setup process. Follow these steps carefull
 In your Firebase project console:
 
 1. **Enable Vertex AI API**:
+
    - Go to "Build" > "Vertex AI"
    - Enable the Vertex AI API
    - Make sure the Gemini models are available in your region
 
 2. **Enable Authentication** (Optional but recommended):
+
    - Go to "Build" > "Authentication"
    - Click "Get started"
    - Enable your preferred sign-in methods
@@ -92,6 +94,7 @@ In your Firebase project console:
 You need to add each platform you want to support:
 
 **For Android:**
+
 1. In Firebase Console, click "Add app" > Android icon
 2. Enter package name: `com.example.aetheria` (or customize it)
 3. Enter app nickname: "Aetheria Android"
@@ -100,6 +103,7 @@ You need to add each platform you want to support:
 6. Place it in `android/app/google-services.json`
 
 **For iOS:**
+
 1. Click "Add app" > iOS icon
 2. Enter bundle ID: `com.example.aetheria` (or customize it)
 3. Enter app nickname: "Aetheria iOS"
@@ -107,12 +111,14 @@ You need to add each platform you want to support:
 5. Place it in `ios/Runner/GoogleService-Info.plist`
 
 **For macOS:**
+
 1. Click "Add app" > iOS icon (use the same process)
 2. Use the same bundle ID as iOS
 3. Download `GoogleService-Info.plist`
 4. Place it in `macos/Runner/GoogleService-Info.plist`
 
 **For Web:**
+
 1. Click "Add app" > Web icon
 2. Enter app nickname: "Aetheria Web"
 3. Copy the Firebase config object
@@ -130,6 +136,7 @@ flutterfire configure
 ```
 
 This will:
+
 - Generate `lib/firebase_options.dart`
 - Update platform-specific configuration files
 - Create or update `firebase.json`
@@ -141,6 +148,7 @@ This will:
 If you want to use a custom package name instead of `com.example.aetheria`:
 
 **Android** (`android/app/build.gradle.kts`):
+
 ```kotlin
 defaultConfig {
     applicationId = "com.yourname.aetheria" // Change this
@@ -149,12 +157,14 @@ defaultConfig {
 ```
 
 **iOS** (`ios/Runner/Info.plist`):
+
 ```xml
 <key>CFBundleIdentifier</key>
 <string>com.yourname.aetheria</string>
 ```
 
 **macOS** (`macos/Runner/Info.plist`):
+
 ```xml
 <key>CFBundleIdentifier</key>
 <string>com.yourname.aetheria</string>
@@ -169,6 +179,7 @@ After running `flutterfire configure`, verify that `lib/firebase_options.dart` w
 #### Android Setup
 
 1. Ensure minimum SDK version in `android/app/build.gradle.kts`:
+
    ```kotlin
    defaultConfig {
        minSdk = 21  // Firebase requires minimum SDK 21
@@ -282,14 +293,17 @@ lib/
 ### Common Issues
 
 1. **Firebase not initialized**
+
    - Ensure `Firebase.initializeApp()` is called in `main()`
    - Verify `firebase_options.dart` exists and is correct
 
 2. **Platform-specific build errors**
+
    - Run `flutter clean && flutter pub get`
    - Ensure all platform configurations are properly set up
 
 3. **Vertex AI API errors**
+
    - Check that Vertex AI is enabled in Firebase Console
    - Verify your Firebase project has billing enabled
    - Ensure Gemini models are available in your region

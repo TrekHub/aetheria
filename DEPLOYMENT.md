@@ -32,11 +32,13 @@ flutter build appbundle --release --obfuscate --split-debug-info=build/debug-inf
 #### Play Store Preparation
 
 1. **Create signing key**:
+
    ```bash
    keytool -genkey -v -keystore ~/aetheria-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias aetheria
    ```
 
 2. **Configure `android/key.properties`**:
+
    ```properties
    storePassword=your_store_password
    keyPassword=your_key_password
@@ -88,17 +90,20 @@ flutter build ios --debug --simulator
 #### App Store Connect
 
 1. **Open in Xcode**:
+
    ```bash
    open ios/Runner.xcworkspace
    ```
 
 2. **Configure signing**:
+
    - Select Runner project
    - Go to Signing & Capabilities
    - Select your development team
    - Choose appropriate provisioning profile
 
 3. **Archive the app**:
+
    - Product → Archive
    - Upload to App Store Connect
 
@@ -111,6 +116,7 @@ flutter build ios --debug --simulator
 #### Required iOS Configurations
 
 **Info.plist updates** (`ios/Runner/Info.plist`):
+
 ```xml
 <!-- Camera access (if needed for future features) -->
 <key>NSCameraUsageDescription</key>
@@ -143,6 +149,7 @@ flutter build macos --release --codesign
 #### Mac App Store
 
 1. **Configure macOS signing**:
+
    - Open `macos/Runner.xcworkspace`
    - Configure signing certificates
    - Set appropriate entitlements
@@ -176,20 +183,18 @@ flutter build web --web-renderer canvaskit --release
 #### Firebase Hosting
 
 1. **Initialize Firebase Hosting**:
+
    ```bash
    firebase init hosting
    ```
 
 2. **Configure `firebase.json`**:
+
    ```json
    {
      "hosting": {
        "public": "build/web",
-       "ignore": [
-         "firebase.json",
-         "**/.*",
-         "**/node_modules/**"
-       ],
+       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
        "rewrites": [
          {
            "source": "**",
@@ -209,28 +214,29 @@ flutter build web --web-renderer canvaskit --release
 #### GitHub Pages
 
 1. **Create `.github/workflows/deploy.yml`**:
+
    ```yaml
    name: Deploy to GitHub Pages
-   
+
    on:
      push:
-       branches: [ main ]
-   
+       branches: [main]
+
    jobs:
      build:
        runs-on: ubuntu-latest
-       
+
        steps:
-       - uses: actions/checkout@v3
-       - uses: subosito/flutter-action@v2
-         with:
-           flutter-version: '3.19.0'
-       - run: flutter pub get
-       - run: flutter build web --base-href "/aetheria/"
-       - uses: peaceiris/actions-gh-pages@v3
-         with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
-           publish_dir: ./build/web
+         - uses: actions/checkout@v3
+         - uses: subosito/flutter-action@v2
+           with:
+             flutter-version: "3.19.0"
+         - run: flutter pub get
+         - run: flutter build web --base-href "/aetheria/"
+         - uses: peaceiris/actions-gh-pages@v3
+           with:
+             github_token: ${{ secrets.GITHUB_TOKEN }}
+             publish_dir: ./build/web
    ```
 
 ### Windows Deployment
@@ -245,11 +251,12 @@ flutter build windows --release
 #### Microsoft Store
 
 1. **Create MSIX package**:
+
    ```bash
    # Add to pubspec.yaml
    dependencies:
      msix: ^3.16.6
-   
+
    # Configure MSIX
    flutter pub run msix:create
    ```
@@ -262,7 +269,7 @@ flutter build windows --release
      identity_name: com.yourname.aetheria
      msix_version: 1.0.0.0
      description: AI-powered spiritual companion app
-     ```
+   ```
 
 ## 🔧 Environment Configuration
 
@@ -275,9 +282,9 @@ Create environment-specific configurations:
 abstract class Environment {
   static const String dev = 'development';
   static const String prod = 'production';
-  
+
   static const String current = String.fromEnvironment('ENV', defaultValue: dev);
-  
+
   static bool get isDevelopment => current == dev;
   static bool get isProduction => current == prod;
 }
@@ -304,6 +311,7 @@ flutterfire configure --project=aetheria-prod
 Create build scripts for different environments:
 
 **`scripts/build_dev.sh`**:
+
 ```bash
 #!/bin/bash
 echo "Building for development..."
@@ -311,6 +319,7 @@ flutter build apk --debug --dart-define=ENV=development
 ```
 
 **`scripts/build_prod.sh`**:
+
 ```bash
 #!/bin/bash
 echo "Building for production..."
@@ -328,61 +337,61 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.19.0'
-    
-    - name: Install dependencies
-      run: flutter pub get
-    
-    - name: Analyze code
-      run: flutter analyze
-    
-    - name: Run tests
-      run: flutter test
-    
-    - name: Build APK
-      run: flutter build apk --debug
-    
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: debug-apk
-        path: build/app/outputs/flutter-apk/app-debug.apk
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.0"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build APK
+        run: flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
 
   deploy:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.19.0'
-    
-    - name: Install dependencies
-      run: flutter pub get
-    
-    - name: Build web
-      run: flutter build web --release
-    
-    - name: Deploy to Firebase Hosting
-      uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: '${{ secrets.GITHUB_TOKEN }}'
-        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-        projectId: your-firebase-project-id
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.0"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build web
+        run: flutter build web --release
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: your-firebase-project-id
 ```
 
 ### Codemagic Setup
@@ -452,10 +461,11 @@ flutter build apk --release --obfuscate --split-debug-info=build/debug-info
 ### Asset Optimization
 
 1. **Optimize images**:
+
    ```bash
    # Install imagemagick
    brew install imagemagick
-   
+
    # Compress images
    find assets/images -name "*.png" -exec convert {} -quality 85 {} \;
    ```
@@ -487,6 +497,7 @@ flutter build apk --release --obfuscate --split-debug-info=build/debug-info
 ### API Key Security
 
 1. **Use environment variables**:
+
    ```dart
    const String apiKey = String.fromEnvironment('API_KEY');
    ```
@@ -567,6 +578,7 @@ await trace.stop();
 ### Common Issues
 
 1. **Gradle build failures**:
+
    ```bash
    cd android
    ./gradlew clean
@@ -576,6 +588,7 @@ await trace.stop();
    ```
 
 2. **iOS build issues**:
+
    ```bash
    cd ios
    pod deintegrate

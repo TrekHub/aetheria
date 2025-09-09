@@ -5,6 +5,7 @@ This guide provides detailed steps for setting up Firebase for the Aetheria proj
 ## 📋 Prerequisites
 
 Before starting, ensure you have:
+
 - A Google account
 - Firebase CLI installed (`npm install -g firebase-tools`)
 - FlutterFire CLI installed (`dart pub global activate flutterfire_cli`)
@@ -17,6 +18,7 @@ Before starting, ensure you have:
 1. **Go to Firebase Console**: Visit [https://console.firebase.google.com/](https://console.firebase.google.com/)
 
 2. **Create New Project**:
+
    - Click "Create a project" or "Add project"
    - Enter project name: `aetheria-[your-suffix]` (e.g., `aetheria-john-doe`)
    - Choose whether to enable Google Analytics (recommended: **Yes**)
@@ -115,6 +117,7 @@ You need to register each platform (Android, iOS, Web, etc.) with Firebase:
 This step automatically generates platform configurations:
 
 1. **Run FlutterFire configuration**:
+
    ```bash
    flutterfire configure
    ```
@@ -122,8 +125,9 @@ This step automatically generates platform configurations:
 2. **Select your Firebase project** from the list
 
 3. **Choose platforms** to configure:
+
    - ✅ Android
-   - ✅ iOS  
+   - ✅ iOS
    - ✅ macOS
    - ✅ Web
    - ✅ Windows (if you plan to support it)
@@ -167,6 +171,7 @@ class DefaultFirebaseOptions {
 #### Verify Platform Files
 
 **Android** - `android/app/google-services.json`:
+
 ```json
 {
   "project_info": {
@@ -187,6 +192,7 @@ class DefaultFirebaseOptions {
 ```
 
 **iOS/macOS** - `ios/Runner/GoogleService-Info.plist`:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -249,6 +255,7 @@ buildscript {
 ### 7. Test Firebase Integration
 
 1. **Run the app**:
+
    ```bash
    flutter run
    ```
@@ -267,11 +274,13 @@ buildscript {
 2. **Select your project**
 
 3. **Enable Vertex AI API**:
+
    - Go to "APIs & Services" > "Library"
    - Search for "Vertex AI API"
    - Click "Enable"
 
 4. **Set up authentication**:
+
    - Firebase handles this automatically
    - Ensure your Firebase project has billing enabled
 
@@ -292,7 +301,7 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Public read for shared content (like daily verses)
     match /daily_verses/{document} {
       allow read: if true;
@@ -305,6 +314,7 @@ service cloud.firestore {
 #### Firebase Authentication Rules
 
 Configure in Firebase Console > Authentication > Settings:
+
 - **Authorized domains**: Add your domains
 - **Password policy**: Set strength requirements
 - **User management**: Configure user deletion, etc.
@@ -314,12 +324,14 @@ Configure in Firebase Console > Authentication > Settings:
 For production apps, consider multiple environments:
 
 #### Development Environment
+
 ```bash
 # Use separate Firebase project for development
 flutterfire configure --project=aetheria-dev
 ```
 
 #### Production Environment
+
 ```bash
 # Use different Firebase project for production
 flutterfire configure --project=aetheria-prod
@@ -336,6 +348,7 @@ flutterfire configure --project=aetheria-prod
 #### 2. "Google Services plugin not applied"
 
 **Solution**: Add to `android/app/build.gradle.kts`:
+
 ```kotlin
 plugins {
     id("com.google.gms.google-services")
@@ -345,6 +358,7 @@ plugins {
 #### 3. "Package name mismatch"
 
 **Solution**: Ensure package names match in:
+
 - Firebase Console app registration
 - `android/app/build.gradle.kts` → `applicationId`
 - `google-services.json` → `package_name`
@@ -352,6 +366,7 @@ plugins {
 #### 4. "Vertex AI API not enabled"
 
 **Solution**:
+
 1. Go to Google Cloud Console
 2. Enable Vertex AI API
 3. Ensure billing is enabled
@@ -360,6 +375,7 @@ plugins {
 #### 5. "iOS build fails with Firebase"
 
 **Solution**:
+
 1. Ensure `GoogleService-Info.plist` is added to Xcode project
 2. Clean build folder: `flutter clean`
 3. Delete `ios/Pods` and run `cd ios && pod install`
@@ -367,6 +383,7 @@ plugins {
 #### 6. "Web build fails"
 
 **Solution**:
+
 1. Ensure Firebase is initialized before app starts
 2. Check browser console for errors
 3. Verify web configuration in `firebase_options.dart`
@@ -410,6 +427,7 @@ cd android && ./gradlew clean # Android only
 ### Performance Monitoring
 
 1. **Add Performance Monitoring**:
+
    ```yaml
    # pubspec.yaml
    dependencies:
@@ -417,9 +435,10 @@ cd android && ./gradlew clean # Android only
    ```
 
 2. **Initialize in app**:
+
    ```dart
    import 'package:firebase_performance/firebase_performance.dart';
-   
+
    final trace = FirebasePerformance.instance.newTrace('sermon_generation');
    await trace.start();
    // ... your code

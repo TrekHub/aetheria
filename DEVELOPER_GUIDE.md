@@ -5,6 +5,7 @@ Welcome to Aetheria! This guide will get you up and running quickly.
 ## ⚡ Quick Setup (5 minutes)
 
 1. **Clone and Install**:
+
    ```bash
    git clone https://github.com/your-username/aetheria.git
    cd aetheria
@@ -12,14 +13,15 @@ Welcome to Aetheria! This guide will get you up and running quickly.
    ```
 
 2. **Set up Firebase**:
+
    ```bash
    # Install Firebase CLI
    npm install -g firebase-tools
    firebase login
-   
+
    # Install FlutterFire CLI
    dart pub global activate flutterfire_cli
-   
+
    # Configure your project (you'll need your own Firebase project)
    flutterfire configure
    ```
@@ -32,6 +34,7 @@ Welcome to Aetheria! This guide will get you up and running quickly.
 ## 🎯 What is Aetheria?
 
 Aetheria is an AI-powered spiritual companion app that provides:
+
 - **🎤 Personalized Sermons**: AI-generated sermons based on your topics/feelings
 - **📖 Daily Bible Verses**: Inspirational verses with themes and context
 - **🎨 Visual Content**: AI-generated SVG posters for sermons
@@ -79,7 +82,7 @@ See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions.
 ```bash
 # Run on different platforms
 flutter run -d chrome          # Web
-flutter run -d macos          # macOS  
+flutter run -d macos          # macOS
 flutter run -d android        # Android
 flutter run -d ios           # iOS
 
@@ -101,6 +104,7 @@ dart format .                  # Format code
 ## 🎨 Key Features Implementation
 
 ### AI Sermon Generation
+
 ```dart
 // service/sermon_service.dart
 final model = FirebaseAI.vertexAI().generativeModel(model: 'gemini-2.5-flash');
@@ -108,14 +112,16 @@ final response = await model.generateContent(prompt);
 ```
 
 ### Daily Bible Verses
+
 ```dart
-// service/daily_verse_service.dart  
+// service/daily_verse_service.dart
 Future<Map<String, dynamic>> generateDailyVerse() async {
   // AI generates inspirational Bible verse with theme
 }
 ```
 
 ### State Management
+
 ```dart
 // Uses Provider pattern for reactive UI updates
 ChangeNotifierProvider(create: (context) => SermonProvider())
@@ -124,6 +130,7 @@ ChangeNotifierProvider(create: (context) => SermonProvider())
 ## 🧪 Testing the App
 
 1. **Generate Sermon**:
+
    - Open app → tap "Create Sermon"
    - Enter a topic (e.g., "hope", "anxiety", "gratitude")
    - AI generates personalized sermon with Bible verse
@@ -135,10 +142,12 @@ ChangeNotifierProvider(create: (context) => SermonProvider())
 ## ⚠️ Common Setup Issues
 
 1. **"FirebaseOptions not configured"**:
+
    - Run `flutterfire configure`
    - Ensure `lib/firebase_options.dart` exists
 
 2. **"Vertex AI not available"**:
+
    - Enable Vertex AI in Google Cloud Console
    - Ensure billing is enabled
    - Check regional availability
