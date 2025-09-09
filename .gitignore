@@ -44,12 +44,66 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Environment and secrets
+.env
+.env.local
+.env.production
+.env.development
 
-
-# Google Services (e.g. Firebase)
+# Firebase config files (developers need to set up their own)
+# Uncomment these lines if you want to ignore Firebase config files
+# Note: For open source projects, contributors need to create their own Firebase projects
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 /macos/Runner/GoogleService-Info.plist
+
+# Generated Firebase options (will be created by flutterfire configure)
 /lib/firebase_options.dart
 
-firebase.json
+# Keep firebase.json as it contains project structure info but no secrets
+# firebase.json
+
+# Additional development files
+/coverage/
+/test_reports/
+*.lock
+pubspec_overrides.yaml
+
+# Platform specific
+# iOS
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/flutter_assets/
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+
+# Android
+/android/app/src/main/java/io/flutter/plugins/
+/android/.gradle/
+/android/captures/
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
+/android/**/GeneratedPluginRegistrant.java
+/android/.project
+/android/.settings/
+
+# Web
+/web/flutter_service_worker.js
+/web/manifest.json
+
+# macOS
+/macos/Flutter/ephemeral/
+/macos/Pods/
+
+# Windows
+/windows/flutter/generated_plugin_registrant.cc
+/windows/flutter/generated_plugin_registrant.h
+/windows/flutter/generated_plugins.cmake
+
+# Linux
+/linux/flutter/generated_plugin_registrant.cc
+/linux/flutter/generated_plugin_registrant.h
+/linux/flutter/generated_plugins.cmake
