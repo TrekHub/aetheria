@@ -13,7 +13,7 @@ class SermonDisplayScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.skyBlue,
+        backgroundColor: AppTheme.primaryBlue,
         title: Text('Your Sermon'),
         elevation: 0,
       ),
@@ -45,7 +45,7 @@ class SermonDisplayScreen extends StatelessWidget {
                     sermon['poster'],
                     fit: BoxFit.cover,
                     placeholderBuilder: (context) => Container(
-                      color: AppTheme.skyBlue.withOpacity(0.3),
+                      color: AppTheme.primaryBlue.withOpacity(0.3),
                       child: const Center(
                         child: Icon(Icons.image, size: 50, color: Colors.grey),
                       ),
@@ -115,7 +115,7 @@ class SermonDisplayScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: AppTheme.skyBlue, size: 24),
+                Icon(icon, color: AppTheme.primaryBlue, size: 24),
                 const SizedBox(width: 8),
                 Text(
                   title,
@@ -145,7 +145,7 @@ class SermonDisplayScreen extends StatelessWidget {
   Widget _buildBibleVerseCard(Map<String, dynamic> bibleVerse) {
     return Card(
       elevation: 3,
-      color: AppTheme.skyBlue.withOpacity(0.1),
+      color: AppTheme.primaryBlue.withOpacity(0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -154,7 +154,7 @@ class SermonDisplayScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.menu_book, color: AppTheme.skyBlue, size: 24),
+                Icon(Icons.menu_book, color: AppTheme.primaryBlue, size: 24),
                 const SizedBox(width: 8),
                 const Text(
                   'Scripture',
@@ -172,7 +172,9 @@ class SermonDisplayScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppTheme.skyBlue.withOpacity(0.3)),
+                border: Border.all(
+                  color: AppTheme.primaryBlue.withOpacity(0.3),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,7 +196,7 @@ class SermonDisplayScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.skyBlue,
+                        color: AppTheme.primaryBlue,
                       ),
                     ),
                   ),
@@ -210,7 +212,7 @@ class SermonDisplayScreen extends StatelessWidget {
   Widget _buildCallToActionCard(String callToAction) {
     return Card(
       elevation: 3,
-      color: AppTheme.skyBlue.withOpacity(0.2),
+      color: AppTheme.primaryBlue.withOpacity(0.2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       create: (context) => SermonProvider(),
       child: MaterialApp(
         title: 'Aetheria',
-        theme: AppTheme.appTheme,
+        theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
         home: const DashboardScreen(),
       ),
