@@ -1,11 +1,33 @@
+import 'package:aetheria/providers/daily_verse_provider.dart';
 import 'package:aetheria/providers/sermon_provider.dart';
 import 'package:aetheria/screens/sermon_display_screen.dart';
 import 'package:aetheria/screens/sermon_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Automatically generate today's verse when the screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final dailyVerseProvider = Provider.of<DailyVerseProvider>(
+        context,
+        listen: false,
+      );
+      if (!dailyVerseProvider.isToday ||
+          dailyVerseProvider.currentVerse == null) {
+        dailyVerseProvider.generateTodaysVerse();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,29 +40,33 @@ class DashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              
+
               // Simple Header
               _buildHeader(context),
-              
+
               const SizedBox(height: 40),
-              
+
               // Today's Verse - Clean and Simple
-              _buildTodaysVerse(context),
-              
+              Consumer<DailyVerseProvider>(
+                builder: (context, dailyVerseProvider, child) {
+                  return _buildTodaysVerse(context, dailyVerseProvider);
+                },
+              ),
+
               const SizedBox(height: 36),
-              
+
               // How are you feeling? Section
               _buildFeelingSection(context),
-              
+
               const SizedBox(height: 36),
-              
+
               // Recent Sermons
               Consumer<SermonProvider>(
                 builder: (context, sermonProvider, child) {
                   return _buildRecentSermons(context, sermonProvider);
                 },
               ),
-              
+
               const SizedBox(height: 100), // Space for FAB
             ],
           ),
@@ -76,7 +102,10 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTodaysVerse(BuildContext context) {
+  Widget _buildTodaysVerse(
+    BuildContext context,
+    DailyVerseProvider dailyVerseProvider,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -94,34 +123,126 @@ class DashboardScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Today\'s Verse',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[600],
-              letterSpacing: 0.3,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Today\'s Verse',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[600],
+                  letterSpacing: 0.3,
+                ),
+              ),
+              GestureDetector(
+                onTap: dailyVerseProvider.state == DailyVerseState.loading
+                    ? null
+                    : () => _generateTodaysVerse(context, dailyVerseProvider),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: dailyVerseProvider.state == DailyVerseState.loading
+                        ? Colors.grey[300]
+                        : const Color(0xFF2D3748),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (dailyVerseProvider.state ==
+                          DailyVerseState.loading) ...[
+                        const SizedBox(
+                          width: 12,
+                          height: 12,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.5,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                      ] else ...[
+                        const Icon(
+                          Icons.refresh,
+                          color: Colors.white,
+                          size: 14,
+                        ),
+                        const SizedBox(width: 4),
+                      ],
+                      Text(
+                        dailyVerseProvider.state == DailyVerseState.loading
+                            ? 'Generating...'
+                            : 'Generate',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
-          const Text(
-            '"Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth."',
-            style: TextStyle(
-              fontSize: 18,
-              height: 1.6,
-              color: Color(0xFF2D3748),
-              fontWeight: FontWeight.w400,
+          if (dailyVerseProvider.currentVerse != null) ...[
+            Text(
+              '"${dailyVerseProvider.currentVerse!['verse']}"',
+              style: const TextStyle(
+                fontSize: 18,
+                height: 1.6,
+                color: Color(0xFF2D3748),
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Psalm 46:10',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-              fontStyle: FontStyle.italic,
+            const SizedBox(height: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  dailyVerseProvider.currentVerse!['reference'] ?? '',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[500],
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                if (dailyVerseProvider.currentVerse!['theme'] != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF7FAFC),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      dailyVerseProvider.currentVerse!['theme'],
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-          ),
+          ] else ...[
+            Text(
+              'Tap "Generate" to get an inspirational verse for today',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[500],
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -156,12 +277,7 @@ class DashboardScreen extends StatelessWidget {
               '🙏',
               'grateful and thankful',
             ),
-            _buildFeelingChip(
-              context,
-              'Hurt',
-              '💔',
-              'hurt and need healing',
-            ),
+            _buildFeelingChip(context, 'Hurt', '💔', 'hurt and need healing'),
             _buildFeelingChip(
               context,
               'Lost',
@@ -174,12 +290,7 @@ class DashboardScreen extends StatelessWidget {
               '🌟',
               'hopeful and expectant',
             ),
-            _buildFeelingChip(
-              context,
-              'Tired',
-              '😴',
-              'tired and need rest',
-            ),
+            _buildFeelingChip(context, 'Tired', '😴', 'tired and need rest'),
           ],
         ),
       ],
@@ -331,20 +442,13 @@ class DashboardScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         sermon['bible_verse']['reference'] ?? '',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                       ),
                     ],
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                color: Colors.grey[400],
-                size: 20,
-              ),
+              Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),
             ],
           ),
         ),
@@ -405,11 +509,7 @@ class DashboardScreen extends StatelessWidget {
       },
       backgroundColor: const Color(0xFF2D3748),
       elevation: 2,
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
-        size: 28,
-      ),
+      child: const Icon(Icons.add, color: Colors.white, size: 28),
     );
   }
 
@@ -420,5 +520,23 @@ class DashboardScreen extends StatelessWidget {
         builder: (_) => SermonFormScreen(presetFeeling: preset),
       ),
     );
+  }
+
+  Future<void> _generateTodaysVerse(
+    BuildContext context,
+    DailyVerseProvider dailyVerseProvider,
+  ) async {
+    try {
+      await dailyVerseProvider.generateTodaysVerse();
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to generate verse: ${error.toString()}'),
+            backgroundColor: Colors.red[600],
+          ),
+        );
+      }
+    }
   }
 }

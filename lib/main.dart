@@ -1,7 +1,7 @@
 import 'package:aetheria/firebase_options.dart';
+import 'package:aetheria/providers/daily_verse_provider.dart';
 import 'package:aetheria/providers/sermon_provider.dart';
 import 'package:aetheria/screens/splash_screen.dart';
-import 'package:aetheria/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +18,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => SermonProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SermonProvider()),
+        ChangeNotifierProvider(create: (context) => DailyVerseProvider()),
+      ],
       child: MaterialApp(
         title: 'Aetheria',
-        theme: AppTheme.lightTheme,
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),
       ),
